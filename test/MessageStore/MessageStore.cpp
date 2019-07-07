@@ -20,12 +20,10 @@ bool MessageStore::ProcessInput() {
 		std::string str;
 		std::getline(std::cin, str);
 		cout << endl;
-		//if (Exists(str))
 		if (users.addUser(str) ==  -1)
 		{
 			cout << "ERROR: User already exists!" << endl;
 		} else {
-			//users.push_back(str);
 			cout << "User " << str << " added!" << endl;
 		}
 	} else if (in == "2"){
@@ -33,7 +31,6 @@ bool MessageStore::ProcessInput() {
 		std::string from;
 		std::getline(std::cin, from);
 		cout << endl;
-		//if (Exists(from) == false)
 		if (!users.exists(from))
 			cout <<"ERROR: User doesn't exist!" << endl;
 		else {
@@ -41,7 +38,6 @@ bool MessageStore::ProcessInput() {
 			std::string to;
 			std::getline(std::cin, to);
 			cout << endl;
-			//if (Exists(to) == false)
 			if (!users.exists(to))
 				cout <<"ERROR: User doesn't exist!" << endl;
 			else {
@@ -50,14 +46,7 @@ bool MessageStore::ProcessInput() {
 				std::getline(std::cin, msg);
 				cout << endl;
 				cout << "Message Sent!" << endl;
-				//Message* m = new Message;
-				//m->from = users.find(from);;
-				//m->to = users.find(to);;
-				//m->msg = msg;
-				//messages.push_back(m);
 				insert(users.find(from), users.find(to), msg);
-
-				//messagesDb.insert(Message());
 			}
 		}
 	} else if (in == "3") {
@@ -79,26 +68,6 @@ bool MessageStore::ProcessInput() {
 				tos.erase(searchUserMessages);                 				 //messages have been read we clear them
 			}
 			cout << endl << "===== END MESSAGES =====" << endl;
-			/*
-			bool more;
-			do {
-				more = false;
-				for (unsigned int i = 0; i < messages.size(); ++i)
-				{
-					if (messages[i]->to == users.find(user)) {
-						cout << "Message " << ++num << endl;
-						cout << "From: " << messages[i]->from->name << endl;
-						cout << "Content: " << messages[i]->msg << endl << endl;
-						delete messages[i];
-						messages.erase(messages.begin() + i);
-						more = true;
-						break;
-					}
-				}
-			} while (more);
-			*/
-
-
 		} else
 			cout <<"ERROR: User doesn't exist!" << endl;
 	} else if (in == "4") {
@@ -119,11 +88,3 @@ void MessageStore::terminate()
 	for (unsigned int i = 0; i < messages.size(); ++i)
 		delete messages[i];
 }
-/*
-bool MessageStore::Exists(std::string u)
-{
-	for (unsigned int i = 0; i < users.size(); ++i)
-		if (users[i] == u)
-			return true;
-	return false;
-}*/
