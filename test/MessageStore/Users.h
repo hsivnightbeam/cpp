@@ -30,8 +30,8 @@ namespace std
 class Users {
 public:
     int  addUser(const std::string &userName);
-    bool exists(const std::string &userName);
-    const std::unordered_set<User>::iterator  find(const std::string &userName);
+    bool exists(const std::string &userName) const;
+    const std::unordered_set<User>::const_iterator  find(const std::string &userName) const;
 private:
     std::unordered_set<User> usersDb;
 
