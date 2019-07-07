@@ -50,11 +50,14 @@ bool MessageStore::ProcessInput() {
 				std::getline(std::cin, msg);
 				cout << endl;
 				cout << "Message Sent!" << endl;
-				Message* m = new Message;
-				m->from = users.find(from);;
-				m->to = users.find(to);;
-				m->msg = msg;
-				messages.push_back(m);
+				//Message* m = new Message;
+				//m->from = users.find(from);;
+				//m->to = users.find(to);;
+				//m->msg = msg;
+				//messages.push_back(m);
+				insert(users.find(from), users.find(to), msg);
+
+				//messagesDb.insert(Message());
 			}
 		}
 	} else if (in == "3") {
@@ -66,6 +69,17 @@ bool MessageStore::ProcessInput() {
 		{
 			cout << endl << "===== BEGIN MESSAGES =====" << endl;
 			int num = 0;
+			std::unordered_map<std::unordered_set<User>::const_iterator, std::vector<std::unordered_set<Message>::iterator>>::iterator searchUserMessages = tos.find(users.find(user));
+			if ( searchUserMessages != tos.end()) {
+				for (std::unordered_set<Message>::iterator el : searchUserMessages->second) {
+					cout << "Message " << ++num << endl;
+					cout << "From: " << el->from->name << endl;
+					cout << "Content: " << *el->msgBody << endl << endl;
+				}
+				searchUserMessages->second.clear();     //messages have been read we clear them
+			}
+			cout << endl << "===== END MESSAGES =====" << endl;
+			/*
 			bool more;
 			do {
 				more = false;
@@ -82,8 +96,9 @@ bool MessageStore::ProcessInput() {
 					}
 				}
 			} while (more);
+			*/
 
-			cout << endl << "===== END MESSAGES =====" << endl;
+
 		} else
 			cout <<"ERROR: User doesn't exist!" << endl;
 	} else if (in == "4") {
