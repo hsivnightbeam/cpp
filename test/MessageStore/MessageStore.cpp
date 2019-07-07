@@ -51,8 +51,8 @@ bool MessageStore::ProcessInput() {
 				cout << endl;
 				cout << "Message Sent!" << endl;
 				Message* m = new Message;
-				m->from = from;
-				m->to = to;
+				m->from = users.find(from);;
+				m->to = users.find(to);;
 				m->msg = msg;
 				messages.push_back(m);
 			}
@@ -71,9 +71,9 @@ bool MessageStore::ProcessInput() {
 				more = false;
 				for (unsigned int i = 0; i < messages.size(); ++i)
 				{
-					if (messages[i]->to == user) {
+					if (messages[i]->to == users.find(user)) {
 						cout << "Message " << ++num << endl;
-						cout << "From: " << messages[i]->from << endl;
+						cout << "From: " << messages[i]->from->name << endl;
 						cout << "Content: " << messages[i]->msg << endl << endl;
 						delete messages[i];
 						messages.erase(messages.begin() + i);

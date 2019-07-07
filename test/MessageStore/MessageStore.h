@@ -19,8 +19,10 @@ private:
 	//std::vector<std::string> users;
 	Users users;
 	struct Message {
-		std::string from;
-		std::string to;
+		//std::string from;
+		 std::unordered_set<User>::const_iterator from;
+		//std::string to;
+		 std::unordered_set<User>::const_iterator to;
 		std::string msg;
 	};
 	std::vector<Message*> messages;
