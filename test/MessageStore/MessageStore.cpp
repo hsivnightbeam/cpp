@@ -69,14 +69,14 @@ bool MessageStore::ProcessInput() {
 		{
 			cout << endl << "===== BEGIN MESSAGES =====" << endl;
 			int num = 0;
-			std::unordered_map<std::unordered_set<User>::const_iterator, std::vector<std::unordered_set<Message>::iterator>>::iterator searchUserMessages = tos.find(users.find(user));
+			auto searchUserMessages = tos.find(users.find(user));
 			if ( searchUserMessages != tos.end()) {
 				for (std::unordered_set<Message>::iterator el : searchUserMessages->second) {
 					cout << "Message " << ++num << endl;
 					cout << "From: " << el->from->name << endl;
 					cout << "Content: " << *el->msgBody << endl << endl;
 				}
-				searchUserMessages->second.clear();     //messages have been read we clear them
+				tos.erase(searchUserMessages);                 				 //messages have been read we clear them
 			}
 			cout << endl << "===== END MESSAGES =====" << endl;
 			/*
