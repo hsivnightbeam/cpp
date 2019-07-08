@@ -61,12 +61,13 @@ bool MessageStore::ProcessInput() {
 			int num = 0;
 			auto searchUserMessages = userReceiveMsgsIndex.find(users.find(user));
 			if ( searchUserMessages != userReceiveMsgsIndex.end()) {
-				for (std::unordered_set<Message>::iterator el : searchUserMessages->second) {
+				for (auto &el : searchUserMessages->second) {
 					cout << "Message " << ++num << endl;
 					cout << "From: " << el->from->name << endl;
 					cout << "Content: " << *el->msgBody << endl << endl;
+					el->msgBody.reset();                                                         //message have been read we clear them
 				}
-				userReceiveMsgsIndex.erase(searchUserMessages);                 				 //messages have been read we clear them
+				userReceiveMsgsIndex.erase(searchUserMessages);                 				 //also remove the index not required
 			}
 			cout << endl << "===== END MESSAGES =====" << endl;
 		} else
