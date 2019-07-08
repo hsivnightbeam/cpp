@@ -1,8 +1,8 @@
 
 #include "MessageStore.h"
-#include "Users.h"
+#include "UserStore.h"
 
-int Users::id = 0;
+int UserStore::id = 0;
 
 int main(int, const char* [])
 {

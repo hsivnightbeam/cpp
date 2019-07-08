@@ -6,15 +6,12 @@
 #include <set>
 #include <ctime>
 #include <map>
-#include "Users.h"
+#include "UserStore.h"
 
 
 #include <iostream>
 
 using namespace std;
-
-struct Message;
-
 
 struct Message {
 	int msgId;
@@ -34,28 +31,28 @@ struct Message {
     }
 };
 
-	namespace std
-	{
-	  template<>
-	    struct hash<Message>
-	    {
-	      size_t
-	      operator()(const Message & obj) const
-	      {
-	        return hash<int>()(obj.msgId);
-	      }
-	    };
+namespace std
+{
+  template<>
+    struct hash<Message>
+    {
+      size_t
+      operator()(const Message & obj) const
+      {
+        return hash<int>()(obj.msgId);
+      }
+    };
 
-		template<>
-		  struct hash<std::unordered_set<User>::const_iterator>
-		  {
-			size_t
-			operator()(const std::unordered_set<User>::const_iterator &obj) const
-			{
-			  return hash<int>()(obj->id);
-			}
-		  };
-	}
+	template<>
+	  struct hash<std::unordered_set<User>::const_iterator>
+	  {
+		size_t
+		operator()(const std::unordered_set<User>::const_iterator &obj) const
+		{
+		  return hash<int>()(obj->id);
+		}
+	  };
+}
 
 
 struct compareMessage {
@@ -95,7 +92,7 @@ private:
 	bool Exists(std::string u);
 	//std::vector<std::string> users;
 
-	Users users;
+	UserStore users;
 	std::vector<Message*> messages;
 	std::unordered_set<Message> messagesDb;
 	std::unordered_map<std::unordered_set<User>::const_iterator, std::vector<std::unordered_set<Message>::iterator>> userReceiveMsgsIndex;
