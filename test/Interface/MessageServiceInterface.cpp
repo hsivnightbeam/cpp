@@ -1,7 +1,6 @@
+#include "MessageServiceInterface.h"
 
-#include "MessageStore.h"
-
-bool MessageStore::ProcessInput() {
+bool MessageServiceInterface::ProcessInput() {
 	bool ret = false;
 	// clear screen
 	for (int i = 0; i < 80; ++i) cout << endl;
@@ -21,7 +20,7 @@ bool MessageStore::ProcessInput() {
 		std::string str;
 		std::getline(std::cin, str);
 		cout << endl;
-		if (users.addUser(str) ==  -1)
+		if (msgServiceController.addUser(str) ==  -1)
 		{
 			cout << "ERROR: User already exists!" << endl;
 		} else {
@@ -32,14 +31,14 @@ bool MessageStore::ProcessInput() {
 		std::string from;
 		std::getline(std::cin, from);
 		cout << endl;
-		if (!users.exists(from))
+		if (!msgServiceController.exists(from))
 			cout <<"ERROR: User doesn't exist!" << endl;
 		else {
 			cout << "To: ";
 			std::string to;
 			std::getline(std::cin, to);
 			cout << endl;
-			if (!users.exists(to))
+			if (!msgServiceController.exists(to))
 				cout <<"ERROR: User doesn't exist!" << endl;
 			else {
 				cout << "Message: ";
@@ -47,7 +46,7 @@ bool MessageStore::ProcessInput() {
 				std::getline(std::cin, msg);
 				cout << endl;
 				cout << "Message Sent!" << endl;
-				insert(users.find(from), users.find(to), msg);
+				msgServiceController.insert(from, to, msg);
 			}
 		}
 	} else if (in == "3") {
@@ -55,25 +54,25 @@ bool MessageStore::ProcessInput() {
 		std::string user;
 		std::getline(std::cin, user);
 		cout << endl;
-		if (users.exists(user) == true)
+		if (msgServiceController.exists(user) == true)
 		{
 			cout << endl << "===== BEGIN MESSAGES =====" << endl;
 			int num = 0;
-			auto searchUserMessages = userReceiveMsgsIndex.find(users.find(user));
-			if ( searchUserMessages != userReceiveMsgsIndex.end()) {
+			auto searchUserMessages = msgServiceController.getUserReceiveMsgsIndex().find(msgServiceController.find(user));
+			if ( searchUserMessages != msgServiceController.getUserReceiveMsgsIndex().end()) {
 				for (auto &el : searchUserMessages->second) {
 					cout << "Message " << ++num << endl;
 					cout << "From: " << el->from->name << endl;
 					cout << "Content: " << *el->msgBody << endl << endl;
 					el->msgBody.reset();                                                         //message have been read we clear them
 				}
-				userReceiveMsgsIndex.erase(searchUserMessages);                 				 //also remove the index not required
+				msgServiceController.getUserReceiveMsgsIndex().erase(searchUserMessages);          //also remove the index not required
 			}
 			cout << endl << "===== END MESSAGES =====" << endl;
 		} else
 			cout <<"ERROR: User doesn't exist!" << endl;
 	} else if (in == "4") {
-		for (const auto &el : userSendMsgsIndex) {
+		for (const auto &el : msgServiceController.getUserSendMsgsIndex()) {
 			std::cout << "Sender " << el.first->name << std::endl;
 			for (const auto &subEl : el.second) {
 				std::cout << subEl->timeStamp << " " << subEl->to->name << std::endl;
@@ -92,8 +91,8 @@ bool MessageStore::ProcessInput() {
 	return ret;
 }
 
-void MessageStore::terminate()
+void MessageServiceInterface::terminate()
 {
-	for (unsigned int i = 0; i < messages.size(); ++i)
-		delete messages[i];
+	//for (unsigned int i = 0; i < messages.size(); ++i)
+	//	delete messages[i];
 }

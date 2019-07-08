@@ -2,6 +2,7 @@
 #include "User.h"
 #include <unordered_set>
 
+//This class defines a UserStore class which holds its users in userDb
 class UserStore {
 public:
     static int id;

@@ -2,6 +2,11 @@
 #include <string>
 #include <memory>
 
+//This class defines a Message class that saves:
+//   --msgId
+//   --to, and from detail
+//   --msgBody
+//   --timeStamp
 struct Message {
 	int msgId;
 	std::unordered_set<User>::const_iterator from;

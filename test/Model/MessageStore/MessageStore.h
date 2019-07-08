@@ -28,25 +28,24 @@ struct compareUser {
 	}
 };
 
+//This class defines a MessageStore class which holds messages, in two indexes:
+//userReceiveMsgsIndex--> Index that lets us find the messages received by a user
+//                        When we read the msgs received by a user we delete them from this index, and we also delete the message
+//userSendMsgsIndex   --> We store only metadata regarding messages send.
+//                        -->It's ordered: by it's key: users with lower id are first (compareUser struct)
+//                        -->Also the values (the msgs send by each user) are ordered by recipient id, and timestamp (compareMessage struct)
 class MessageStore
 {
 public:
-	bool ProcessInput(); // returns true when finished
-	void terminate();
 	void insert(const std::unordered_set<User>::iterator iFrom, const std::unordered_set<User>::iterator iTo,
-			std::string iMsgBody) {
-			auto message= make_shared<Message>(id, iFrom, iTo, iMsgBody);
-			id++;
-			userReceiveMsgsIndex[iTo].push_back(message);
-			userSendMsgsIndex[iFrom].insert(message);
-	}
-	MessageStore(): id(0) { }
+			std::string iMsgBody);
+	std::unordered_map<std::unordered_set<User>::iterator, std::vector<std::shared_ptr<Message>>>  getUserReceiveMsgsIndex() { return userReceiveMsgsIndex; }
+	std::map<std::unordered_set<User>::iterator,
+			           std::set<std::shared_ptr<Message>, compareMessage>,
+					   compareUser> getUserSendMsgsIndex() {return userSendMsgsIndex; }
 
 private:
-	int id;
-	UserStore users;
-	std::vector<Message*> messages;
-	std::unordered_set<Message> messagesDb;
+	static int id;
 	std::unordered_map<std::unordered_set<User>::iterator, std::vector<std::shared_ptr<Message>>> userReceiveMsgsIndex;
 	std::map<std::unordered_set<User>::iterator,
 			           std::set<std::shared_ptr<Message>, compareMessage>,

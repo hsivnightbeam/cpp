@@ -2,12 +2,15 @@
 #include <string>
 #include <unordered_set>
 
+//This class defines a User class which has a unique Id, and unique name
 struct User {
     int           id;
     std::string name;
+
     User (const std::string iName,
           const int iId = 0)
-        : id{iId}, name{iName} { }
+        :id{iId}, name{iName} { }
+
     bool operator ==(const User & obj) const {
         return (name == obj.name);
     }
