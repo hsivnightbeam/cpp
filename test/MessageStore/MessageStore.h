@@ -13,15 +13,6 @@
 using namespace std;
 
 
-namespace std
-{
-	template<>
-	struct hash<std::unordered_set<User>::const_iterator> {
-		size_t operator()(const std::unordered_set<User>::const_iterator &obj) const {
-		  	return hash<int>()(obj->id);
-		}
-	};
-}
 
 struct compareMessage {
 	bool operator()(const std::unordered_set<Message>::iterator &first, const std::unordered_set<Message>::iterator &second) const {
@@ -42,7 +33,6 @@ struct compareUser {
 class MessageStore
 {
 public:
-
 	bool ProcessInput(); // returns true when finished
 	void terminate();
 	void insert(const std::unordered_set<User>::const_iterator iFrom, const std::unordered_set<User>::const_iterator iTo,
