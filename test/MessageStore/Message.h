@@ -16,3 +16,17 @@ struct Message {
         return (msgId == obj.msgId);
     }
 };
+
+
+
+namespace std
+{
+    template<>
+    struct hash<Message>
+    {
+        size_t
+        operator()(const Message & obj) const{
+            return hash<int>()(obj.msgId);
+        }
+    };
+}

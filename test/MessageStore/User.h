@@ -15,13 +15,10 @@ struct User {
 
 namespace std
 {
-  template<>
-    struct hash<User>
-    {
-      size_t
-      operator()(const User & obj) const
-      {
-        return hash<std::string>()(obj.name);
-      }
+    template<>
+    struct hash<User> {
+        size_t operator()(const User & obj) const {
+            return hash<std::string>()(obj.name);
+        }
     };
 }

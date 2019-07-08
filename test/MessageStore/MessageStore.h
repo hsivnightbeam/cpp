@@ -15,27 +15,13 @@ using namespace std;
 
 namespace std
 {
-  template<>
-    struct hash<Message>
-    {
-      size_t
-      operator()(const Message & obj) const
-      {
-        return hash<int>()(obj.msgId);
-      }
-    };
-
 	template<>
-	  struct hash<std::unordered_set<User>::const_iterator>
-	  {
-		size_t
-		operator()(const std::unordered_set<User>::const_iterator &obj) const
-		{
-		  return hash<int>()(obj->id);
+	struct hash<std::unordered_set<User>::const_iterator> {
+		size_t operator()(const std::unordered_set<User>::const_iterator &obj) const {
+		  	return hash<int>()(obj->id);
 		}
-	  };
+	};
 }
-
 
 struct compareMessage {
 	bool operator()(const std::unordered_set<Message>::iterator &first, const std::unordered_set<Message>::iterator &second) const {
@@ -52,7 +38,6 @@ struct compareUser {
 		return first->id < second->id;
 	}
 };
-
 
 class MessageStore
 {
@@ -81,21 +66,3 @@ private:
 					   compareUser>   userSendMsgsIndex;
 
 };
-
-
-/*
-
-bool cmp(int a, int b) {
-    return ...;
-}
-Then use it
-
-std::set<int, decltype(&cmp)> s(&cmp);
-std::function<bool (int, int)> numbers;
-public:
-     Foo () : numbers ([](int x, int y)
-                       {
-                           return x < y;
-                       })
-     {
-     }*/
