@@ -16,6 +16,6 @@ bool UserStore::exists(const std::string &userName) const {
     return true;
 }
 
-const std::unordered_set<User>::const_iterator  UserStore::find(const std::string &userName) const {
+const std::unordered_set<User>::iterator  UserStore::find(const std::string &userName) {
     return (usersDb.find(User(userName, 0)));
 }

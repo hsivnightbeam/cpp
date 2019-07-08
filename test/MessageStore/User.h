@@ -5,14 +5,13 @@
 struct User {
     int           id;
     std::string name;
-    User (const std::string iName, const int iId = 0): id{iId}, name{iName}{ }
+    User (const std::string iName,
+          const int iId = 0)
+        : id{iId}, name{iName} { }
     bool operator ==(const User & obj) const {
-        if (name == obj.name)
-            return true;
-        else
-            return false;
-        }
-    };
+        return (name == obj.name);
+    }
+};
 
 namespace std
 {
@@ -24,8 +23,8 @@ namespace std
     };
 
     template<>
-    struct hash<std::unordered_set<User>::const_iterator> {
-    	size_t operator()(const std::unordered_set<User>::const_iterator &obj) const {
+    struct hash<std::unordered_set<User>::iterator> {
+    	size_t operator()(const std::unordered_set<User>::iterator &obj) const {
     		  return hash<int>()(obj->id);
     	}
     };

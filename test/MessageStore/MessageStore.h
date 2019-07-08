@@ -23,7 +23,7 @@ struct compareMessage {
 };
 
 struct compareUser {
-	bool operator()(const std::unordered_set<User>::const_iterator &first, const std::unordered_set<User>::const_iterator &second) const {
+	bool operator()(const std::unordered_set<User>::iterator &first, const std::unordered_set<User>::iterator &second) const {
 		return first->id < second->id;
 	}
 };
@@ -33,7 +33,7 @@ class MessageStore
 public:
 	bool ProcessInput(); // returns true when finished
 	void terminate();
-	void insert(const std::unordered_set<User>::const_iterator iFrom, const std::unordered_set<User>::const_iterator iTo,
+	void insert(const std::unordered_set<User>::iterator iFrom, const std::unordered_set<User>::iterator iTo,
 			std::string iMsgBody) {
 			auto message= make_shared<Message>(id, iFrom, iTo, iMsgBody);
 			id++;
@@ -47,8 +47,8 @@ private:
 	UserStore users;
 	std::vector<Message*> messages;
 	std::unordered_set<Message> messagesDb;
-	std::unordered_map<std::unordered_set<User>::const_iterator, std::vector<std::shared_ptr<Message>>> userReceiveMsgsIndex;
-	std::map<std::unordered_set<User>::const_iterator,
+	std::unordered_map<std::unordered_set<User>::iterator, std::vector<std::shared_ptr<Message>>> userReceiveMsgsIndex;
+	std::map<std::unordered_set<User>::iterator,
 			           std::set<std::shared_ptr<Message>, compareMessage>,
 					   compareUser>   userSendMsgsIndex;
 
