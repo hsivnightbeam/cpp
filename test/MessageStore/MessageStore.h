@@ -1,35 +1,17 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <memory>
 #include <unordered_map>
 #include <set>
 #include <ctime>
 #include <map>
 #include "UserStore.h"
-
+#include "Message.h"
 
 #include <iostream>
 
 using namespace std;
 
-struct Message {
-	int msgId;
-	std::unordered_set<User>::const_iterator from;
-	std::unordered_set<User>::const_iterator to;
-	std::unique_ptr<std::string>             msgBody;
-	std::time_t                              timeStamp;
-
-	Message(int iMsgId, std::unordered_set<User>::const_iterator iFrom, std::unordered_set<User>::const_iterator iTo, std::string &iMsgBody)
-		:msgId{iMsgId}, from{iFrom}, to{iTo}, msgBody{make_unique<std::string>(iMsgBody)}, timeStamp{std::time(nullptr)}
-		{ }
-	bool operator ==(const Message & obj) const {
-        if (msgId == obj.msgId)
-            return true;
-        else
-            return false;
-    }
-};
 
 namespace std
 {
@@ -89,9 +71,6 @@ public:
 
 private:
 	int id;
-	bool Exists(std::string u);
-	//std::vector<std::string> users;
-
 	UserStore users;
 	std::vector<Message*> messages;
 	std::unordered_set<Message> messagesDb;
