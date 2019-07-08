@@ -10,7 +10,8 @@ bool MessageStore::ProcessInput() {
 	cout << "1. Create User" << endl;
 	cout << "2. Send Message" << endl;
 	cout << "3. Receive All Messages For User" << endl;
-	cout << "4. Quit" << endl;
+	cout << "4. Report all messages of all senders" << endl;
+	cout << "5. Quit" << endl;
 	std::string in;
 	std::getline(std::cin, in);
 	cout << endl;
@@ -58,19 +59,26 @@ bool MessageStore::ProcessInput() {
 		{
 			cout << endl << "===== BEGIN MESSAGES =====" << endl;
 			int num = 0;
-			auto searchUserMessages = tos.find(users.find(user));
-			if ( searchUserMessages != tos.end()) {
+			auto searchUserMessages = userReceiveMsgsIndex.find(users.find(user));
+			if ( searchUserMessages != userReceiveMsgsIndex.end()) {
 				for (std::unordered_set<Message>::iterator el : searchUserMessages->second) {
 					cout << "Message " << ++num << endl;
 					cout << "From: " << el->from->name << endl;
 					cout << "Content: " << *el->msgBody << endl << endl;
 				}
-				tos.erase(searchUserMessages);                 				 //messages have been read we clear them
+				userReceiveMsgsIndex.erase(searchUserMessages);                 				 //messages have been read we clear them
 			}
 			cout << endl << "===== END MESSAGES =====" << endl;
 		} else
 			cout <<"ERROR: User doesn't exist!" << endl;
 	} else if (in == "4") {
+		for (const auto &el : userSendMsgsIndex) {
+			std::cout << "Sender " << el.first->name << std::endl;
+			for (const auto &subEl : el.second) {
+				std::cout << subEl->timeStamp << " " << subEl->to->name << std::endl;
+			}
+		}
+	} else if (in == "5") {
 		cout << "Quitting!" << endl;
 		ret=true;
 	} else

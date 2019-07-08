@@ -2,8 +2,9 @@
 
 
 int Users::addUser(const std::string &userName) {
-    if (usersDb.find(User(userName, 0)) == usersDb.end()) {
-        usersDb.insert(User(userName, 0));
+    if (usersDb.find(User(userName)) == usersDb.end()) {       //
+        usersDb.insert(User(userName, id));
+        ++id;
         return 0;
     }
     return -1;

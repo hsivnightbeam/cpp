@@ -5,7 +5,7 @@
 struct User {
     int           id;
     std::string name;
-    User (const std::string iName, const int iId): id{iId}, name{iName}{ }
+    User (const std::string iName, const int iId = 0): id{iId}, name{iName}{ }
     bool operator ==(const User & obj) const {
         if (name == obj.name)
             return true;
@@ -29,6 +29,7 @@ namespace std
 
 class Users {
 public:
+    static int id;
     int  addUser(const std::string &userName);
     bool exists(const std::string &userName) const;
     const std::unordered_set<User>::const_iterator  find(const std::string &userName) const;
