@@ -9,9 +9,9 @@ public:
     int                                             addUser(const std::string &userName)         { return users.addUser(userName); }
     bool                                            exists (const std::string &userName)  const  { return users.exists(userName); }
     const std::unordered_set<User>::iterator        find   (const std::string &userName)         { return users.find(userName); }
-    void insert(const std::string &iFrom,
-                const std::string &iTo,
-			    std::string &iMsgBody) {
+    void                                            insert (const std::string &iFrom,
+                                                            const std::string &iTo,
+			                                                std::string &iMsgBody) {
         messages.insert(users.find(iFrom), users.find(iTo), iMsgBody);
     }
 

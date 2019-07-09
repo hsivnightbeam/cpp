@@ -1,7 +1,7 @@
 #include "UserStore.h"
 
 int UserStore::addUser(const std::string &userName) {
-    if (usersDb.find(User(userName)) == usersDb.end()) {       //
+    if (!exists(userName)) {       //
         usersDb.insert(User(userName, id));
         ++id;
         return 0;
