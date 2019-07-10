@@ -1,6 +1,7 @@
 #include "UserStore.h"
 
-int UserStore::addUser(const std::string &userName) {
+int UserStore::addUser(const std::string &userName)
+{
     if (!exists(userName)) {       //
         usersDb.insert(User(userName, id));
         ++id;
@@ -9,13 +10,12 @@ int UserStore::addUser(const std::string &userName) {
     return -1;
 }
 
-bool UserStore::exists(const std::string &userName) const {
-    if (usersDb.find(User(userName, 0)) == usersDb.end()) {
-        return false;
-    }
-    return true;
+bool UserStore::exists(const std::string &userName) const
+{
+    return (usersDb.find(User(userName, 0)) != usersDb.end());
 }
 
-const setUser::iterator  UserStore::find(const std::string &userName) {
+const setUser::iterator  UserStore::find(const std::string &userName)
+{
     return (usersDb.find(User(userName, 0)));
 }

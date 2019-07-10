@@ -2,10 +2,11 @@
 #include "User.h"
 #include <unordered_set>
 
+using setUser = std::unordered_set<User>;
 //This class defines a UserStore class which holds its users in userDb
 class UserStore {
 public:
-    using setUser = std::unordered_set<User>;
+    //using setUser = std::unordered_set<User>;
     static int id;
 
     //method that addsUser to db:

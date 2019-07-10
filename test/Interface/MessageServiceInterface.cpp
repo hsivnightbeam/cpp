@@ -1,4 +1,5 @@
 #include "MessageServiceInterface.h"
+#include <sstream>
 
 bool MessageServiceInterface::ProcessInput() {
 	bool ret = false;
@@ -14,7 +15,7 @@ bool MessageServiceInterface::ProcessInput() {
 	std::string in;
 	std::getline(std::cin, in);
 	cout << endl;
-	if (in == "1")
+	if (in == ONE)
 	{
 		cout << "Please enter name: ";
 		std::string str;
@@ -26,7 +27,7 @@ bool MessageServiceInterface::ProcessInput() {
 		} else {
 			cout << "User " << str << " added!" << endl;
 		}
-	} else if (in == "2"){
+	} else if (in == TWO){
 		cout << "From: ";
 		std::string from;
 		std::getline(std::cin, from);
@@ -49,7 +50,7 @@ bool MessageServiceInterface::ProcessInput() {
 				msgServiceController.insert(from, to, msg);
 			}
 		}
-	} else if (in == "3") {
+	} else if (in == THREE) {
 		cout << "Enter name of user to receive all messages for: " << endl;
 		std::string user;
 		std::getline(std::cin, user);
@@ -59,7 +60,9 @@ bool MessageServiceInterface::ProcessInput() {
 			cout << endl << "===== BEGIN MESSAGES =====" << endl;
 			int num = 0;
 			auto searchUserMessages = msgServiceController.getUserReceiveMsgsIndex().find(msgServiceController.find(user));
+			std::cout << "here1" << std::endl;
 			if ( searchUserMessages != msgServiceController.getUserReceiveMsgsIndex().end()) {
+				std::cout << "here2" << std::endl;
 				for (auto &el : searchUserMessages->second) {
 					cout << "Message " << ++num << endl;
 					cout << "From: " << el->from->name << endl;
@@ -71,14 +74,20 @@ bool MessageServiceInterface::ProcessInput() {
 			cout << endl << "===== END MESSAGES =====" << endl;
 		} else
 			cout <<"ERROR: User doesn't exist!" << endl;
-	} else if (in == "4") {
+	} else if (in == FOUR) {
+		cout << endl << "===== BEGIN MESSAGES OF ALL USERS=====" << endl;
 		for (const auto &el : msgServiceController.getUserSendMsgsIndex()) {
 			std::cout << "Sender " << el.first->name << std::endl;
 			for (const auto &subEl : el.second) {
-				std::cout << subEl->timeStamp << " " << subEl->to->name << std::endl;
+				std::ostringstream streamTime;
+				streamTime << std::ctime(&subEl->timeStamp);
+				std::string stringTime = streamTime.str();
+				std::cout << stringTime.substr(0, stringTime.length()-1) << " " << subEl->to->name << std::endl;
+				//std::cout << asctime(localtm) << " " << subEl->to->name << std::endl;
 			}
 		}
-	} else if (in == "5") {
+		cout << endl << "===== END MESSAGES OF ALL USERS =====" << endl;
+	} else if (in == FIVE) {
 		cout << "Quitting!" << endl;
 		ret=true;
 	} else

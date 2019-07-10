@@ -3,7 +3,6 @@
 #include <vector>
 #include <unordered_map>
 #include <set>
-#include <ctime>
 #include <map>
 #include "UserStore.h"
 #include "Message.h"
@@ -28,6 +27,10 @@ struct compareUser {
 	}
 };
 
+using vectMsg =  std::vector<std::shared_ptr<Message>>;
+using setMsg  =  std::set<std::shared_ptr<Message>, compareMessage>;
+using hashUserReciMsg = std::unordered_map<setUser::iterator, vectMsg>;
+using mapUserSentMsg  = std::map<setUser::iterator, setMsg, compareUser>;
 //This class defines a MessageStore class which holds messages, in two indexes:
 //userReceiveMsgsIndex--> Index that lets us find the messages received by a user
 //                        When we read the msgs received by a user we delete them from this index, and we also delete the message
@@ -37,18 +40,15 @@ struct compareUser {
 class MessageStore
 {
 public:
-	void insert(const std::unordered_set<User>::iterator iFrom, const std::unordered_set<User>::iterator iTo,
-			std::string iMsgBody);
-	std::unordered_map<std::unordered_set<User>::iterator, std::vector<std::shared_ptr<Message>>>  getUserReceiveMsgsIndex() { return userReceiveMsgsIndex; }
-	std::map<std::unordered_set<User>::iterator,
-			           std::set<std::shared_ptr<Message>, compareMessage>,
-					   compareUser> getUserSendMsgsIndex() {return userSendMsgsIndex; }
+	void                   insert                 (const setUser::iterator iFrom,
+				                                   const setUser::iterator iTo,
+			                                       const std::string       &iMsgBody);
+	      hashUserReciMsg& getUserReceiveMsgsIndex()                                   {return userReceiveMsgsIndex; }
+	const mapUserSentMsg&  getUserSendMsgsIndex   ()                                   {return userSendMsgsIndex; }
 
 private:
 	static int id;
-	std::unordered_map<std::unordered_set<User>::iterator, std::vector<std::shared_ptr<Message>>> userReceiveMsgsIndex;
-	std::map<std::unordered_set<User>::iterator,
-			           std::set<std::shared_ptr<Message>, compareMessage>,
-					   compareUser>   userSendMsgsIndex;
+	hashUserReciMsg userReceiveMsgsIndex;
+	mapUserSentMsg  userSendMsgsIndex;
 
 };
