@@ -10,14 +10,14 @@
 //   --timeStamp
 struct Message {
 	int                                      msgId;       //we use this field to have a simple hash on Message
-	setUser::const_iterator                  from;
-	setUser::const_iterator                  to;
+	hashSetUser::const_iterator              from;
+	hashSetUser::const_iterator              to;
 	std::unique_ptr<std::string>             msgBody;
 	std::time_t                              timeStamp;
 	//Constructor
-	Message(      int                     iMsgId,
-		          setUser::const_iterator iFrom,
-			      setUser::const_iterator iTo,
+	Message(      int                         iMsgId,
+		          hashSetUser::const_iterator iFrom,
+			      hashSetUser::const_iterator iTo,
 			const std::string             &iMsgBody)
 		:msgId{iMsgId}, from{iFrom}, to{iTo}, msgBody{std::make_unique<std::string>(iMsgBody)}, timeStamp{std::time(nullptr)}
 		 { }
@@ -26,6 +26,8 @@ struct Message {
 	bool operator ==(const Message & obj) const {
         return (msgId == obj.msgId);
     }
+	Message (const Message&)            = delete; 
+    Message& operator= (const Message&) = delete;
 };
 
 

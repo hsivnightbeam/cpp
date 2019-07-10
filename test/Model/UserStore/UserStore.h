@@ -2,11 +2,11 @@
 #include "User.h"
 #include <unordered_set>
 
-using setUser = std::unordered_set<User>;
+using hashSetUser = std::unordered_set<User>;
 //This class defines a UserStore class which holds its users in userDb
 class UserStore {
 public:
-    //using setUser = std::unordered_set<User>;
+    //using hashSetUser = std::unordered_set<User>;
     static int id;
 
     //method that addsUser to db:
@@ -19,8 +19,8 @@ public:
 
     //method that returns iterator to the userName
     //returns usersDb::end() if it doesn't exist
-    const setUser::iterator                         find   (const std::string &userName);
+    const hashSetUser::iterator                         find   (const std::string &userName);
 private:
-    setUser usersDb;
+    hashSetUser usersDb;
 
 };

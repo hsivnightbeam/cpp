@@ -15,7 +15,7 @@ bool UserStore::exists(const std::string &userName) const
     return (usersDb.find(User(userName, 0)) != usersDb.end());
 }
 
-const setUser::iterator  UserStore::find(const std::string &userName)
+const hashSetUser::iterator  UserStore::find(const std::string &userName)
 {
     return (usersDb.find(User(userName, 0)));
 }

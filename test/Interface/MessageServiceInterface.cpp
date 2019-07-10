@@ -60,10 +60,9 @@ bool MessageServiceInterface::ProcessInput() {
 			cout << endl << "===== BEGIN MESSAGES =====" << endl;
 			int num = 0;
 			auto searchUserMessages = msgServiceController.getUserReceiveMsgsIndex().find(msgServiceController.find(user));
-			std::cout << "here1" << std::endl;
 			if ( searchUserMessages != msgServiceController.getUserReceiveMsgsIndex().end()) {
-				std::cout << "here2" << std::endl;
-				for (auto &el : searchUserMessages->second) {
+				vectMsg userVecMessages = searchUserMessages->second;
+				for (auto &el : userVecMessages) {
 					cout << "Message " << ++num << endl;
 					cout << "From: " << el->from->name << endl;
 					cout << "Content: " << *el->msgBody << endl << endl;
@@ -77,12 +76,12 @@ bool MessageServiceInterface::ProcessInput() {
 	} else if (in == FOUR) {
 		cout << endl << "===== BEGIN MESSAGES OF ALL USERS=====" << endl;
 		for (const auto &el : msgServiceController.getUserSendMsgsIndex()) {
-			std::cout << "Sender " << el.first->name << std::endl;
+			std::cout << "Sender " << el.first->name << " (" << el.second.size() << " messages):" << std::endl;
 			for (const auto &subEl : el.second) {
 				std::ostringstream streamTime;
 				streamTime << std::ctime(&subEl->timeStamp);
 				std::string stringTime = streamTime.str();
-				std::cout << stringTime.substr(0, stringTime.length()-1) << " " << subEl->to->name << std::endl;
+				std::cout << "      " << stringTime.substr(0, stringTime.length()-1) << ", " << subEl->to->name << std::endl;
 				//std::cout << asctime(localtm) << " " << subEl->to->name << std::endl;
 			}
 		}

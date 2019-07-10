@@ -29,8 +29,8 @@ struct compareUser {
 
 using vectMsg =  std::vector<std::shared_ptr<Message>>;
 using setMsg  =  std::set<std::shared_ptr<Message>, compareMessage>;
-using hashUserReciMsg = std::unordered_map<setUser::iterator, vectMsg>;
-using mapUserSentMsg  = std::map<setUser::iterator, setMsg, compareUser>;
+using hasMaphUserReciMsg = std::unordered_map<hashSetUser::iterator, vectMsg>;
+using mapUserSentMsg  = std::map<hashSetUser::iterator, setMsg, compareUser>;
 //This class defines a MessageStore class which holds messages, in two indexes:
 //userReceiveMsgsIndex--> Index that lets us find the messages received by a user
 //                        When we read the msgs received by a user we delete them from this index, and we also delete the message
@@ -40,15 +40,15 @@ using mapUserSentMsg  = std::map<setUser::iterator, setMsg, compareUser>;
 class MessageStore
 {
 public:
-	void                   insert                 (const setUser::iterator iFrom,
-				                                   const setUser::iterator iTo,
+	void                   insert                 (const hashSetUser::iterator iFrom,
+				                                   const hashSetUser::iterator iTo,
 			                                       const std::string       &iMsgBody);
-	      hashUserReciMsg& getUserReceiveMsgsIndex()                                   {return userReceiveMsgsIndex; }
-	const mapUserSentMsg&  getUserSendMsgsIndex   ()                                   {return userSendMsgsIndex; }
+	      hasMaphUserReciMsg& getUserReceiveMsgsIndex()                                   {return userReceiveMsgsIndex; }
+	const mapUserSentMsg&     getUserSendMsgsIndex   ()                                   {return userSendMsgsIndex; }
 
 private:
 	static int id;
-	hashUserReciMsg userReceiveMsgsIndex;
+	hasMaphUserReciMsg userReceiveMsgsIndex;
 	mapUserSentMsg  userSendMsgsIndex;
 
 };
