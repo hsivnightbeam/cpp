@@ -1,0 +1,9 @@
+#Versions: --0.1: 08th July
+                  Develop the first version for this program
+                  Limitations: -- No unittests
+
+
+Design:
+ --Main: the design follows a MVC Pattern
+         Creates a Controller, that interacts with Model.
+         Interface only ever "talks" to the functionalities provided by Controller.
