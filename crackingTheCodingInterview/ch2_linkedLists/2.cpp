@@ -3,33 +3,53 @@
 */
 
 #include <iostream>
+#include <algorithm>
 
 struct Node {
-    int p;
+    int data;
     Node* next;
-    Node(int iP) : p{iP}, next{nullptr} { }
+    Node(int iData) : data{iData}, next{nullptr} { }
 };
 
 struct LinkedList {
     Node* head;
     Node* tail;
-    LinkedList (int p) : head{new Node(p)}, tail{head} { }
-    Node* insert (int p) {
-        Node* nextN = new Node(p);
-        tail->next = nextN;
-        tail = nextN;
+    std::size_t size;
+
+    //Constructors
+    LinkedList () : head{nullptr}, tail{nullptr}, size{0} { }
+    explicit LinkedList (int iData) : head{new Node(iData)}, tail{head}, size{0} { }
+    LinkedList (std::initializer_list<int> iDataList) : head {nullptr}, tail {nullptr}, size{0} {
+        std::for_each(iDataList.begin(), iDataList.end(),
+                      [this] (const int& i) { insert(i);});
+    }
+
+    //insert one element into the end (tail) of the linked list
+    Node* insert (int iData) {
+        if (head == nullptr) {   //if the list is empty
+            head = tail = new Node(iData);
+            size = 1;
+            return tail;
+        }
+        Node* newEl = new Node(iData);
+        tail->next = newEl;
+        tail = newEl;
+        ++size;
         return tail;
     }
 
-    void print() {
-        Node* it = head;
-        while (it) {
-            std::cout << it->p << " ";
-            it = it->next;
-        }
-        std::cout << std::endl;
-    }
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const LinkedList& list);
 };
+//output operator for LinkedList class
+std::ostream& operator<<(std::ostream &os, const LinkedList& list) {
+    Node* it = list.head;
+    while (it) {
+        os << it->data << " ";
+        it = it->next;
+    }
+    return os;
+}
 
 
 // --method that finds the 'kth' to last element of a singly linked list
@@ -71,24 +91,20 @@ Node* sol2 (LinkedList& list, int k) {
 
 
 int main () {
-    LinkedList aList(1);
-    for (int i = 0; i < 8; ++i) {
-        aList.insert(i+2);
-    }
-
-    std::cout << "list: ";
-    aList.print();
+    LinkedList aList{1, 2, 4, 6, 8, 10, 12, 14, 16};
+    std::cout << "list: " << aList << std::endl;
+    
     int k;
     while (std::cout << "Please input kth to find: " && std::cin >> k) {
         auto res1 = sol1(aList, k);
         if (res1)
-            std::cout << "kth to last is " << res1->p << std::endl;
+            std::cout << "kth to last is " << res1->data << std::endl;
         else
             std::cout << "kth to last doesn't exist (list too small)" << std::endl;
 
         auto resRecursiveSolution = sol2(aList, k);
         if (resRecursiveSolution)
-            std::cout << "kth to last is " << resRecursiveSolution->p << std::endl;
+            std::cout << "kth to last is " << resRecursiveSolution->data << std::endl;
         else
             std::cout << "kth to last can't be found with recursive solution (list too small)" << std::endl;
     }

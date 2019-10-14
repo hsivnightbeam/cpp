@@ -3,37 +3,53 @@
 */
 
 #include <iostream>
+#include <algorithm>
+
 struct Node {
-    char p;
+    char data;
     Node* next;
-    Node(char iP) : p{iP}, next{nullptr} { }
+    Node(char iData) : data{iData}, next{nullptr} { }
 };
 
 struct LinkedList {
     Node* head;
     Node* tail;
-    LinkedList (char p) : head{new Node(p)}, tail{head} { }
-    LinkedList () : head{nullptr}, tail{nullptr} { }
-    Node* insert (char p) {
-        Node* nextN = new Node(p);
-        if (tail)
-            tail->next = nextN;
-        tail = nextN;
-        if (!head)
-            head = nextN;
+    std::size_t size;
+
+    //Constructors
+    LinkedList () : head{nullptr}, tail{nullptr}, size{0} { }
+    explicit LinkedList (char iData) : head{new Node(iData)}, tail{head}, size{0} { }
+    LinkedList (std::initializer_list<char> iDataList) : head {nullptr}, tail {nullptr}, size{0} {
+        std::for_each(iDataList.begin(), iDataList.end(),
+                      [this] (const int& i) { insert(i);});
+    }
+
+    //insert one element into the end (tail) of the linked list
+    Node* insert (int iData) {
+        if (head == nullptr) {   //if the list is empty
+            head = tail = new Node(iData);
+            size = 1;
+            return tail;
+        }
+        Node* newEl = new Node(iData);
+        tail->next = newEl;
+        tail = newEl;
+        ++size;
         return tail;
     }
 
-    void print() {
-        Node* it = head;
-        std::cout << "list: ";
-        while (it) {
-            std::cout << it->p << " ";
-            it = it->next;
-        }
-        std::cout << std::endl;
-    }
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const LinkedList& list);
 };
+//output operator for LinkedList class
+std::ostream& operator<<(std::ostream &os, const LinkedList& list) {
+    Node* it = list.head;
+    while (it) {
+        os << it->data << " ";
+        it = it->next;
+    }
+    return os;
+}
 
 // --method to check if a linked list is a palindrome
 bool isPalindrome(LinkedList &aL) {
@@ -51,7 +67,7 @@ bool isPalindrome(LinkedList &aL) {
     std::string firstHalf;
     it = aL.head;
     for (int i = 0; i < size/2; ++i) {
-        firstHalf.push_back(it->p);
+        firstHalf.push_back(it->data);
         it = it->next;
     }
     //skip the middle character in uneven strings
@@ -60,7 +76,7 @@ bool isPalindrome(LinkedList &aL) {
     int i = 0;
     //check for the second half of the str if its equal to the first half
     while (it) {
-        if (it->p != firstHalf[firstHalf.size()-1-i])
+        if (it->data != firstHalf[firstHalf.size()-1-i])
             return false;
         it = it->next;
         ++i;
@@ -68,16 +84,8 @@ bool isPalindrome(LinkedList &aL) {
     return true;
 }
 
-
-
-
-
 int main () {
-    LinkedList aL('a');
-    aL.insert('b');
-    aL.insert('c');
-    aL.insert('b');
-    aL.insert('a');
+    LinkedList aL{'a', 'b', 'c', 'b', 'a'};
     std::cout << "isPal " << isPalindrome(aL) << std::endl;
     return 0;
 }

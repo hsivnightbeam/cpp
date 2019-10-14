@@ -3,41 +3,60 @@
 */
 
 #include <iostream>
+#include <algorithm>
 
 struct Node {
-    int p;
+    int data;
     Node* next;
-    Node(int iP) : p{iP}, next{nullptr} { }
+    Node(int iData) : data{iData}, next{nullptr} { }
 };
 
 struct LinkedList {
     Node* head;
     Node* tail;
-    LinkedList (int p) : head{new Node(p)}, tail{head} { }
-    Node* insert (int p) {
-        Node* nextN = new Node(p);
-        tail->next = nextN;
-        tail = nextN;
+    std::size_t size;
+
+    //Constructors
+    LinkedList () : head{nullptr}, tail{nullptr}, size{0} { }
+    explicit LinkedList (int iData) : head{new Node(iData)}, tail{head}, size{0} { }
+    LinkedList (std::initializer_list<int> iDataList) : head {nullptr}, tail {nullptr}, size{0} {
+        std::for_each(iDataList.begin(), iDataList.end(),
+                      [this] (const int& i) { insert(i);});
+    }
+
+    //insert one element into the end (tail) of the linked list
+    Node* insert (int iData) {
+        if (head == nullptr) {   //if the list is empty
+            head = tail = new Node(iData);
+            size = 1;
+            return tail;
+        }
+        Node* newEl = new Node(iData);
+        tail->next = newEl;
+        tail = newEl;
+        ++size;
         return tail;
     }
 
-    void print() {
-        Node* it = head;
-        std::cout << "list: ";
-        while (it) {
-            std::cout << it->p << " ";
-            it = it->next;
-        }
-        std::cout << std::endl;
-    }
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const LinkedList& list);
 };
+//output operator for LinkedList class
+std::ostream& operator<<(std::ostream &os, const LinkedList& list) {
+    Node* it = list.head;
+    while (it) {
+        os << it->data << " ";
+        it = it->next;
+    }
+    return os;
+}
 
 // --method that finds first portion of elements >= x, and returns it in Nodes [begPor, endPor]
 void findFirstPortionGreaterThanPartionElem(LinkedList &aList, int partition, Node* &begPor, Node* &endPor, Node* &it) {
     //find first portion of elements >= partition
     bool foundPortion = false;
     while (!foundPortion && it) {
-        if (it->p >= partition) {
+        if (it->data >= partition) {
             if (!begPor)
                 begPor = endPor = it;
             else
@@ -53,7 +72,7 @@ void findFirstPortionGreaterThanPartionElem(LinkedList &aList, int partition, No
 
 // --method that swaps elements in the beginning of the portion with the element elSmallerToPart and updates the partition
 void swapEl (Node* &begPor, Node* &endPor, Node* elSmallerToPart) {
-    std::swap(begPor->p, elSmallerToPart->p);
+    std::swap(begPor->data, elSmallerToPart->data);
     begPor = begPor->next;
     endPor = endPor->next;
 }
@@ -68,7 +87,7 @@ void sol (LinkedList &aList, int x) {
 
     //now we just need to do repetead swaps until we reach the end
     while (it) {
-        if (it->p < x) {
+        if (it->data < x) {
             swapEl(begPor, endPor, it);
         }
         it = it->next;
@@ -76,16 +95,10 @@ void sol (LinkedList &aList, int x) {
 }
 
 int main () {
-    LinkedList aList {3};
-    aList.insert (2);
-    aList.insert (8);
-    aList.insert(4);
-    aList.insert(9);
-    aList.insert(1);
-    aList.insert(5);
-    aList.print();
+    LinkedList aList {3,2,8,4,9,1,5};
+    std::cout << aList << std::endl;
     sol(aList, 5);
-    aList.print();
+    std::cout << aList << std::endl;
 
     return 0;
 }
