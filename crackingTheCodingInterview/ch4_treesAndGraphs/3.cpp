@@ -7,30 +7,33 @@
 #include <queue>
 #include <iostream>
 
+// Struct Node for a tree node
 struct Node {
     int data;
     Node *left, *right;
-    Node (int iD) : data {iD}, left{nullptr}, right{nullptr} { }
-    void print () {
-        if (left) left->print();
-        std::cout << data << " ";
-        if (right) right->print();
-    }
+    explicit Node(int iData) : data{iData}, left{nullptr}, right{nullptr} { }
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const Node& node);
 };
 
-
+//output operator for Node class
+std::ostream& operator<<(std::ostream &os, const Node& node) {
+    if (node.left) os << *node.left;
+    os << node.data << " ";
+    if (node.right) os << *node.right;
+    return os;
+}
 
 // --method that creates a minimal tree from an sorted (increasing order) array iData, from index iFirstIdx, to iLastIdx
 // --output in head
 void createMinBst (const std::vector<int> &data, int first, int last, Node* &head)  {
     head = new Node {data[(first+last)/ 2]};
     if (first != last) {
-        if (last - first > 1) //todo: i wonder is there a way of simplifying to avoid this....i don't think so but compare a bit the binary search algo with this when implementing to understand them well
+        if (last - first > 1) //TODO: i wonder is there a way of simplifying to avoid this....i don't think so but compare a bit the binary search algo with this when implementing to understand them well
             createMinBst(data, first, (first+last)/2-1, head->left);
         createMinBst(data, (first+last)/2+1, last, head->right);
     }
 }
-
 
 // --method that returns a vector of linked list of all the nodes at each depth
 std::vector<std::list<Node*>> createListOfDepths (Node *head) {
@@ -56,12 +59,9 @@ std::vector<std::list<Node*>> createListOfDepths (Node *head) {
             std::swap(nodesCurrentLevel, nodesNextLevel);
             currentDepthList.clear();
         }
-
     }
     return result;
 }
-
-
 
 
 int main () {
@@ -72,6 +72,7 @@ int main () {
     createMinBst(data, first, last, head);
 
     std::vector<std::list<Node*>> result = createListOfDepths(head);
+    std::cout << "Printing linked lists of the depth of each level from tree ";
     for (const auto &i : result) {
         for (const auto &j : i)
             std::cout << j->data << " ";

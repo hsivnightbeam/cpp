@@ -5,16 +5,28 @@
 #include<stack>
 using namespace std;
 
-struct node{
+// Struct Node for a tree Node
+struct Node {
     int data;
-    node *right, *left;
+    Node *left, *right;
+    Node() : data {0}, left{nullptr}, right {nullptr} { }
+    explicit Node(int iData) : data{iData}, left{nullptr}, right{nullptr} { }
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const Node& Node);
 };
+//output operator for Node class
+std::ostream& operator<<(std::ostream &os, const Node& Node) {
+    if (Node.left) os << *Node.left;
+    os << Node.data << " ";
+    if (Node.right) os << *Node.right;
+    return os;
+}
 
-void createMinimalBst(node* &root, int arr[], int start, int end){
+void createMinimalBst(Node* &root, int arr[], int start, int end){
     if(start>end)
         return;
     if(root==NULL){
-        node *ptr = new node;
+        Node *ptr = new Node;
         int ind = start + (end-start)/2;
         ptr->data = arr[ind];
         ptr->left = NULL;
@@ -25,9 +37,9 @@ void createMinimalBst(node* &root, int arr[], int start, int end){
     }
 }
 /*
-node* inOrderSuccessorWithParent(node* root, node* ptr){
+Node* inOrderSuccessorWithParent(Node* root, Node* ptr){
     if(ptr->right){
-        node *p = ptr;
+        Node *p = ptr;
         while(p->left){
             p = p->left;
         }
@@ -47,10 +59,10 @@ node* inOrderSuccessorWithParent(node* root, node* ptr){
 }
 */
 
-// --method to find the "next" node of a given node in a binary search tree
-node* inOrderSuccessor(node* root, int k){
-    stack<node*> S;
-    node *ptr = root;
+// --method to find the "next" Node of a given Node in a binary search tree
+Node* inOrderSuccessor(Node* root, int k){
+    stack<Node*> S;
+    Node *ptr = root;
     bool searched = false;
     while(true){
         while(ptr){
@@ -74,9 +86,9 @@ node* inOrderSuccessor(node* root, int k){
 
 int main(){
     int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    node* root;
+    Node* root;
     root = NULL;
     createMinimalBst(root, arr, 0, 8);
-    node* searchedNode = inOrderSuccessor(root, 4);
+    Node* searchedNode = inOrderSuccessor(root, 4);
     cout<<searchedNode->data<<'\n';
 }

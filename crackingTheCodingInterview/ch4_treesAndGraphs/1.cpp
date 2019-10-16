@@ -8,31 +8,32 @@
 #include <map>
 #include <algorithm>
 
-
+// Struct Node for a graph node
 struct Node {
     int data;
     std::vector<Node*> adjacentVertex;
     bool visited;
     Node(int iD) : data {iD}, visited {false}{ }
-    void print() const {
-        std::cout << data << " ";
-        for (auto &i : adjacentVertex) {
-            std::cout << i->data << " ";
-        }
-        std::cout << std::endl;
-    }
+
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const Node& node);
 };
 
+//output operator for Node class
+std::ostream& operator<<(std::ostream &os, const Node& node) {
+    os << node.data << ": ";
+    for (auto &i : node.adjacentVertex) {
+        os << i->data << " ";
+    }
+    return os;
+}
+
+// Graph class as Adjacency List representation
 struct Graph {
     std::vector<Node*> nodes;                        //i think this could work really
     std::map<Node*, bool> visited;
 
-    void print() {
-        for (const auto &i : nodes)
-            i->print();
-    }
-
-    void readGraph () {  //todo should just pass an input stream (that could be file or whatever and should read from there)
+    void readGraph () {  //TODO: should just pass an input stream (that could be file or whatever and should read from there)
         //vertex and edges...
         std::ifstream file("./4_treesAndGraphs/4.1.in");
         if (!file) {
@@ -56,38 +57,48 @@ struct Graph {
 
     }
 
-    void search (Node* root) {
+    // --recursive method that will fill visited vector, of nodes that are reachable from 'root'
+    void depthFirstSearch (Node* root) {
         if (root == nullptr) return;
-        visited[root] = true;
+        visited[root] = true;  //a node can always reach itself
         for (const auto &el : root->adjacentVertex)
-            if (!visited[el])
-                search(el);
+            if (!visited[el])  //so that we don't enter in a infinite loop
+                depthFirstSearch(el);
     }
 
     // --method that check if there's a path between orig and dest
     bool pathCheck(int orig, int dest) {
+        //cleaning visited to false in case it was used in a previous run
         std::for_each(nodes.begin(), nodes.end(), [&visited = visited] (auto &el) { visited[el] = false;});
-        search(nodes[orig]);
-        return visited[nodes[dest]];
 
+        depthFirstSearch(nodes[orig]);
+        return visited[nodes[dest]];
     }
 
-
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const Graph& node);
 };
+
+//output operator for LinkedList class
+std::ostream& operator<<(std::ostream &os, const Graph& graph) {
+    for (const auto &i : graph.nodes)
+        os << *i << std::endl;
+    return os;
+}
 
 
 
 
 int main () {
-    Graph aG{};
+    Graph aG;
 
     aG.readGraph();
-    aG.print();
+    std::cout << aG << std::endl;
     std::cout << "after printing " << std::endl;
 
     int pathOrig = 0, pathDest = 0;
-    while (std::cin >> pathOrig >> pathDest) {
-        std::cout << aG.pathCheck(pathOrig, pathDest) << std::endl;
+    while (std::cout << "Please input origin and destination node(separated by space): " && std::cin >> pathOrig >> pathDest) {
+        std::cout << "There's path between them? " << aG.pathCheck(pathOrig, pathDest) << std::endl;
     }
 
     return 0;

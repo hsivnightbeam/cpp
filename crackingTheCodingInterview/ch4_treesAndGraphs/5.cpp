@@ -4,19 +4,24 @@
 #include <vector>
 #include <iostream>
 
+// Struct Node for a tree node
 struct Node {
     int data;
     Node *left, *right;
-    Node(int iD) : data{iD}, left{nullptr}, right{nullptr} { }
-
-    void print () {
-        if (left) left->print();
-        std::cout << data << " ";
-        if (right) right->print();
-    }
+    explicit Node(int iData) : data{iData}, left{nullptr}, right{nullptr} { }
+    //output operator
+    friend std::ostream& operator<<(std::ostream &os, const Node& node);
 };
+//output operator for Node class
+std::ostream& operator<<(std::ostream &os, const Node& node) {
+    if (node.left) os << *node.left;
+    os << node.data << " ";
+    if (node.right) os << *node.right;
+    return os;
+}
 
-
+// --method that creates a minimal tree from an sorted (increasing order) array iData, from index iFirstIdx, to iLastIdx
+// --output in head
 void createMinBst (const std::vector<int> &data, int first, int last, Node* &head)  {
     head = new Node {data[(first+last)/ 2]};
     if (first != last) {
@@ -51,9 +56,10 @@ int main () {
     int first = 0, last = data.size()-1;
     Node* head = nullptr;
     createMinBst(data, first, last, head);
+    std::cout << "Is it the tree a BST? " << checkIfBST(head) << std::endl;
 
-    std::cout << checkIfBST(head) << std::endl;
-
+    head->left->data = 10;
+    std::cout << "Is it the tree a BST? " << checkIfBST(head) << std::endl;
 
     return 0;
 }
